@@ -1,0 +1,209 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+@{ 
+   ViewBag.Title = "Sleep Log";
+   List<UserAccount> creds = ((IEnumerable<UserAccount>)ViewData["accDetails"]).ToList();
+   List<SleepLog> logs = ((IEnumerable<SleepLog>)ViewData["sleepLogs"]).Reverse().ToList();
+}
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">@ViewBag.Title</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <a href="#" class="btn btn-sm btn-neutral">New</a>
+                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">@DateTime.Now.ToString("dddd, dd MMMM yyyy")</h3>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <form class="mr-3" action="../AddSleepLog?id=@creds[0].UserID" method="post">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="description">Short Description</label>
+                                        <input type="text" class="form-control" placeholder="Short Description" name="description" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="hours">Hours of Sleep</label>
+                                        <input type="range" class="form-control-range" min="0" max="12" name="hours" oninput="this.nextElementSibling.value = this.value">
+                                        <output class="text-center w-100 mt-2">6</output>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pl-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="details">Details</label>
+                                <textarea rows="4" class="form-control" placeholder="Enter the details of your log..." name="details"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <input class="btn btn-primary mt-2 mb-4" type="submit" value="Submit">
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="sort" data-sort="name">Date</th>
+                                <th scope="col" class="sort" data-sort="budget">Hours</th>
+                                <th scope="col" class="sort" data-sort="completion">Description</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="list">
+                            @foreach (var log in logs)
+                            {
+                            <tr>
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <div class="media-body">
+                                            <span class="name mb-0 text-sm">@DateTime.Parse(log.Date.ToString()).ToString("MMM d, yyyy")</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <span class="mr-2">@log.Hours</span>
+                                        <div>
+                                            <div class="progress">
+                                                @if (log.Hours <= 1)
+                                                {
+                                                <div class="progress-bar bg-gradient-darker" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="120" style="width: 0%;"></div>
+                                                }
+                                                else if (log.Hours <= 2)
+                                                {
+                                                <div class="progress-bar bg-gradient-red" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="120" style="width: 10%;"></div>
+                                                }
+                                                else if (log.Hours <= 3)
+                                                {
+                                                <div class="progress-bar bg-gradient-red" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="120" style="width: 20%;"></div>
+                                                }
+                                                else if (log.Hours <= 4)
+                                                {
+                                                <div class="progress-bar bg-gradient-orange" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="120" style="width: 30%;"></div>
+                                                }
+                                                else if (log.Hours <= 5)
+                                                {
+                                                <div class="progress-bar bg-gradient-orange" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="120" style="width: 40%;"></div>
+                                                }
+                                                else if (log.Hours <= 6)
+                                                {
+                                                <div class="progress-bar bg-gradient-yellow" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="120" style="width: 50%;"></div>
+                                                }
+                                                else if (log.Hours <= 7)
+                                                {
+                                                <div class="progress-bar bg-gradient-yellow" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="120" style="width: 60%;"></div>
+                                                }
+                                                else if (log.Hours <= 8)
+                                                {
+                                                <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="120" style="width: 70%;"></div>
+                                                }
+                                                else if (log.Hours <= 9)
+                                                {
+                                                <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="120" style="width: 80%;"></div>
+                                                }
+                                                else if (log.Hours <= 10)
+                                                {
+                                                <div class="progress-bar bg-gradient-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="120" style="width: 90%;"></div>
+                                                }
+                                                else if (log.Hours <= 12)
+                                                {
+                                                <div class="progress-bar bg-gradient-green" role="progressbar" aria-valuenow="120" aria-valuemin="0" aria-valuemax="120" style="width: 100%;"></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @log.Description
+                                </td>
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" href="../SleepLog/@creds[0].UserID?show=@log.SleepLogID">View</a>
+                                            <a class="dropdown-item" href="../UpdateSleepLog/@creds[0].UserID?log=@log.SleepLogID">Edit</a>
+                                            <a class="dropdown-item" href="../DeleteSleepLog?id=@log.SleepLogID">Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            if (!String.IsNullOrEmpty(Request["show"]) && Request["show"] == log.SleepLogID.ToString())
+                            { 
+                            <tr>
+                                <td colspan="3" class="text-wrap border-top-0">@log.Details</td>
+                            </tr>
+                            }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Card footer -->
+                <div class="card-footer py-4">
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-end mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">
+                                    <i class="fas fa-angle-left"></i>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">
+                                    <i class="fas fa-angle-right"></i>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+@{
+    ViewBag.Title = "Update Log";
+    List<UserAccount> creds = ((IEnumerable<UserAccount>)ViewData["accDetails"]).ToList();
+    List<SleepLog> log = ((IEnumerable<SleepLog>)ViewData["sleepLog"]).ToList();
+}
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">@ViewBag.Title</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })">Home</a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("SleepLog", "Home", new { id = creds[0].UserID })">Sleep Log</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <a href="#" class="btn btn-sm btn-neutral">New</a>
+                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">@DateTime.Parse(log[0].Date.ToString()).ToString("dddd, dd MMMM yyyy")</h3>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <form class="mr-3" action="../DoUpdateSleepLog?id=@log[0].SleepLogID" method="post">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="description">Short Description</label>
+                                        <input type="text" class="form-control" placeholder="Short Description" value="@log[0].Description" name="description" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="hours">Hours of Sleep</label>
+                                        <input type="range" class="form-control-range" min="0" max="12" name="hours" value="@Convert.ToInt16(log[0].Hours)" oninput="this.nextElementSibling.value = this.value">
+                                        <output class="text-center w-100 mt-2">@Convert.ToInt16(log[0].Hours)</output>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pl-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="details">Details</label>
+                                <textarea rows="4" class="form-control" placeholder="Enter the details of your log..." name="details">@log[0].Details</textarea>
+                            </div>
+                            <div class="text-center">
+                                <input class="btn btn-primary mt-2 mb-4" type="submit" value="Update">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

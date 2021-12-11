@@ -1,0 +1,335 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+@{
+    ViewBag.Title = "Dashboard";
+    List<UserAccount> creds = ((IEnumerable<UserAccount>)ViewData["accDetails"]).ToList();
+    List<DailyLog> entries = ((IEnumerable<DailyLog>)ViewData["logEntries"]).ToList();
+    List<ActivityLog> activityLogs = ((IEnumerable<ActivityLog>)ViewData["activityLogs"]).ToList();
+    List<HydrationLog> hydrationLogs = ((IEnumerable<HydrationLog>)ViewData["hydrationLogs"]).ToList();
+    List<SleepLog> sleepLogs = ((IEnumerable<SleepLog>)ViewData["sleepLogs"]).ToList();
+
+    var activities = new Dictionary<String, int>();
+
+    foreach (var act in activityLogs)
+    {
+        if (activities.ContainsKey(act.Activity))
+        {
+            activities[act.Activity]++;
+        } else
+        {
+            activities.Add(act.Activity, 1);
+        }
+    }
+
+    var totalWater = 0;
+
+    foreach (var log in hydrationLogs)
+    {
+        totalWater += Convert.ToInt16(log.Glasses);
+    }
+
+    var avgWater = hydrationLogs.Count() != 0 ? totalWater / hydrationLogs.Count() : 0;
+
+    var totalSleep = 0;
+
+    foreach (var log in sleepLogs)
+    {
+        totalSleep += Convert.ToInt16(log.Hours);
+    }
+
+    var avgSleep = sleepLogs.Count() != 0 ? totalSleep / sleepLogs.Count() : 0;
+
+    var great = 0;
+    var good = 0;
+    var okay = 0;
+    var bad = 0;
+    var terrible = 0;
+
+    foreach (var entry in entries)
+    {
+        if (entry.Mood == "great")
+        {
+            great++;
+        } else if (entry.Mood == "good")
+        {
+            good++;
+        } else if (entry.Mood == "okay")
+        {
+            okay++;
+        } else if (entry.Mood == "bad")
+        {
+            bad++;
+        } else if (entry.Mood == "terrible")
+        {
+            terrible++;
+        }
+    }
+
+}
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">@ViewBag.Title</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <a href="#" class="btn btn-sm btn-neutral">New</a>
+                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                </div>
+            </div>
+        </div>
+        <!-- Card stats -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Entries</h5>
+                                <span class="h2 font-weight-bold mb-0">@entries.Count()</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                    <i class="ni ni-book-bookmark"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @(entries.Count() * 100)%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Productivity</h5>
+                                <span class="h2 font-weight-bold mb-0">@activityLogs.Count() tasks</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                    <i class="ni ni-satisfied"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @(activityLogs.Count() * 100)%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Average Water</h5>
+                                <span class="h2 font-weight-bold mb-0">@avgWater glasses</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-cyan text-white rounded-circle shadow">
+                                    <i class="ni ni-chart-bar-32"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @(avgWater * 100)%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Average Sleep</h5>
+                                <span class="h2 font-weight-bold mb-0">@avgSleep hours</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                                    <i class="ni ni-favourite-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-3 mb-0 text-sm">
+                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @(avgSleep * 100)%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Mood Tracker</h3>
+                        </div>
+                        <div class="col text-right">
+                            <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Mood</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">Average</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    Great
+                                </th>
+                                <td>
+                                    @great
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(great * 100)%
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    Good
+                                </th>
+                                <td>
+                                    @good
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(good * 100)%
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    Okay
+                                </th>
+                                <td>
+                                    @okay
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(okay * 100)%
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    Bad
+                                </th>
+                                <td>
+                                    @bad
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(bad * 100)%
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    Terrible
+                                </th>
+                                <td>
+                                    @terrible
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(terrible * 100)%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Top Activities</h3>
+                        </div>
+                        <div class="col text-right">
+                            <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Activity</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">Average</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var act in activities.OrderBy(key => key.Value).Reverse().Take(5)) 
+                            {
+                            <tr>
+                                <th scope="row">
+                                    @act.Key
+                                </th>
+                                <td>
+                                    @act.Value
+                                </td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success mr-3"></i> @(act.Value * 100)%
+                                </td>
+                            </tr>
+                            }
+                            @if (activities.Count() == 0)
+                            {
+                             <tr>
+                                <td scope="row" colspan="3" rowspan="5" class="text-center">
+                                    Top activities will display here
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

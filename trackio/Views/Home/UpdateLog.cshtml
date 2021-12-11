@@ -1,0 +1,143 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+
+
+
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+@{
+    ViewBag.Title = "Update Entry";
+    List<UserAccount> creds = ((IEnumerable<UserAccount>)ViewData["accDetails"]).ToList();
+    List<DailyLog> entry = ((IEnumerable<DailyLog>)ViewData["entryDeets"]).ToList();
+}
+
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                    <h6 class="h2 text-white d-inline-block mb-0">@ViewBag.Title</h6>
+                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { id = creds[0].UserID })">Home</a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("DailyLog", "Home", new { id = creds[0].UserID })">Daily Log</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 col-5 text-right">
+                    <a href="#" class="btn btn-sm btn-neutral">New</a>
+                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                    <h3 class="mb-0">@DateTime.Parse(entry[0].Date.ToString()).ToString("dddd, dd MMMM yyyy")</h3>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                    <form class="mr-3" action="../DoUpdateLog?id=@entry[0].EntryID" method="post">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="title">Entry Title</label>
+                                        <input type="text" class="form-control" placeholder="Entry Title" value="@entry[0].Title" name="title" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="mood">Mood</label>
+                                        <select class="form-control" name="mood">
+                                            @if (entry[0].Mood == "great")
+                                            {
+                                            <option>Select a mood</option>
+                                            <option selected value="great">Great</option>
+                                            <option value="good">Good</option>
+                                            <option value="okay">Okay</option>
+                                            <option value="bad">Bad</option>
+                                            <option value="terrible">Terrible</option>
+                                            }
+                                            else if (entry[0].Mood == "good")
+                                            {
+                                            <option>Select a mood</option>
+                                            <option value="great">Great</option>
+                                            <option selected value="good">Good</option>
+                                            <option value="okay">Okay</option>
+                                            <option value="bad">Bad</option>
+                                            <option value="terrible">Terrible</option>
+                                            }
+                                            else if (entry[0].Mood == "okay")
+                                            {
+                                            <option>Select a mood</option>
+                                            <option value="great">Great</option>
+                                            <option value="good">Good</option>
+                                            <option selected value="okay">Okay</option>
+                                            <option value="bad">Bad</option>
+                                            <option value="terrible">Terrible</option>
+                                            }
+                                            else if (entry[0].Mood == "bad")
+                                            {
+                                            <option>Select a mood</option>
+                                            <option value="great">Great</option>
+                                            <option value="good">Good</option>
+                                            <option value="okay">Okay</option>
+                                            <option selected value="bad">Bad</option>
+                                            <option value="terrible">Terrible</option>
+                                            }
+                                            else if (entry[0].Mood == "terrible")
+                                            {
+                                            <option>Select a mood</option>
+                                            <option value="great">Great</option>
+                                            <option value="good">Good</option>
+                                            <option value="okay">Okay</option>
+                                            <option value="bad">Bad</option>
+                                            <option selected value="terrible">Terrible</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="description">Short Description</label>
+                                        <input class="form-control" placeholder="Short Description" value="@entry[0].Description" type="text" name="description" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pl-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="details">Details</label>
+                                <textarea rows="4" class="form-control" placeholder="Enter the details for your entry..." name="details" required>@entry[0].Details</textarea>
+                            </div>
+                            <div class="text-center">
+                                <input class="btn btn-primary mt-2 mb-4" type="submit" value="Update">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
