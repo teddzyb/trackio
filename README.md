@@ -4,7 +4,7 @@ Trackio is a personal journaling and needs tracking website developed with ASP.N
 ## Features
 
 #### Dashboard
-- Displays statistics on your all the different components in the website, such as your total journal entries, total completed tasks, average daily glasses of water, average daily hours of sleep, mood tracker, and top activities throughout the month.
+- Displays statistics on all the different components in the website, such as your total journal entries, total completed tasks, average daily glasses of water, average daily hours of sleep, mood tracker, and top activities throughout the month.
 
 #### Daily Log
 - Allows you to create daily log entries for your journal, where you can set an entry title, your current mood, a short description of your entry, and a more detailed description. The page displays all your previous entries which you can view, edit, or delete.
