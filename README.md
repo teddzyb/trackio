@@ -1,5 +1,5 @@
 # trackio
-Trackio is a personal journaling and needs tracking website developed with ASP.NET and MS SQL Server Database.
+Trackio is a personal journaling and needs tracking website developed with ASP.NET and MS SQL Server Database. It features a dynamic dashboard, daily logging, activity tracking, hydration tracking, sleep logging, and customizable profiles.
 
 ## Features
 
