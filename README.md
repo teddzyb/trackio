@@ -53,3 +53,6 @@ This website was created through a template made by Creative Tim. All UI and com
 * Product Page: https://www.creative-tim.com/product/argon-dashboard
 * Copyright  Creative Tim (http://www.creative-tim.com)
 * Coded by www.creative-tim.com
+
+## Project Status
+Completed: December 12, 2021
